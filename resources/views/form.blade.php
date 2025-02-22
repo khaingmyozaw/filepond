@@ -13,8 +13,8 @@
 <body>
     
     <div class="w-screen h-screen flex items-center justify-center p-5 bg-gray-200">
-        <div class="w-3xs p-5 bg-red-500 rounded">
-            <form action="{{ route('upload') }}" method="POST" enctype="multipart/form-data">
+        <div class="w-1/3 p-5 bg-red-500 rounded">
+            <form action="{{ route('articles.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <input type="text" name="title" id="title" class="w-full block min-w-0 grow py-1.5 pr-3 pl-1 border mb-3 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6" placeholder="janesmith">
                 <input type="file" name="file" id="file" class="w-full block mb-3 pond" multiple>
