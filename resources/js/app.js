@@ -17,12 +17,11 @@ const pond = $('.pond').get(0);
 FilePond.registerPlugin(FilePondPluginImagePreview);
 FilePond.create(pond, {
     credits: false,
-    name: 'file',
     server: {
         process: '/upload/process',
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
-        allowMultiple: false
+        allowMultiple: true
     }
 });

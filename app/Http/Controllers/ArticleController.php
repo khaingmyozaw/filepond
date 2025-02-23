@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\Article;
@@ -12,28 +13,29 @@ class ArticleController extends Controller
         // Validate required fields
         $request->validate([
             'title' => 'required|string|max:255',
-            'file'  => 'required|string', // File path is passed as string
+            'file' => 'required|array',
+            'file.*' => 'required|string',
         ]);
-
-        // Get the temporary file path
-        $tempPath = $request->input('file');
-
-        // Ensure file exists before moving
-        if (!Storage::exists($tempPath)) {
-            return back()->withErrors(['file' => 'Uploaded file not found.']);
-        }
-
+        $storedPath = [];
         try {
-            // Define the final storage path
-            $storedPath = 'attachments/' . basename($tempPath);
+            $files = $request->input('file');
+            if (is_array($files)) {
+                foreach ($files as $key => $file) {
 
-            // Move file to public storage
-            Storage::move($tempPath, "public/{$storedPath}");
-
+                    // Ensure file exists before moving
+                    if (! Storage::exists($file)) {
+                        return back()->withErrors(['file' => 'Uploaded file not found.']);
+                    }
+                    // Define the final storage path
+                    $storedPath[] = 'attachments/'.basename($file);
+                    // Move file to public storage
+                    Storage::move($file, "public/{$storedPath[$key]}");
+                }
+            }
             // Create article record
             $article = Article::create([
                 'title' => $request->title,
-                'file'  => $storedPath, // Store clean path
+                'file' => json_encode($storedPath), // Store clean path
             ]);
 
             return redirect('/')->with('success', 'File uploaded successfully.');
