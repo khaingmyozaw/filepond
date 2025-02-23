@@ -17,6 +17,7 @@ const pond = $('.pond').get(0);
 FilePond.registerPlugin(FilePondPluginImagePreview);
 FilePond.create(pond, {
     credits: false,
+    name: 'file',
     server: {
         process: '/upload/process',
         headers: {
